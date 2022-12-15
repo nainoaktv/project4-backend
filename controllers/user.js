@@ -61,6 +61,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', async (req, res) => {
     // POST - finding a user and returning the user
     console.log('===> Inside of /login');
+    // find out what req.body returns
     console.log('===> /login -> req.body', req.body);
 
     const foundUser = await User.findOne({ email: req.body.email });
