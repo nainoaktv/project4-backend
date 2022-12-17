@@ -22,23 +22,14 @@ app.use(passport.initialize());
 
 
 
-const db = mongoose.connection;
-
-db.once("open", () => {
-  console.log(`Connected to MongoDB at HOST: ${db.host} and PORT: ${db.port}`);
-});
-
-db.on("error", (error) => {
-  console.log(`Database Error: ${error}`);
-});
 
 // API Routes
 app.get("/", (req, res) => {
   res.json({
-    name: "MERN Auth API",
-    greeting: "Welcome to the our API",
-    author: "YOU",
-    message: "Smile, you are being watched by the Backend Engineering Team",
+    name: "What",
+    greeting: "the",
+    author: "actual",
+    message: "node",
   });
 });
 
@@ -47,7 +38,9 @@ app.use("/users", require("./controllers/user"));
 app.use("/posts", PostRoute);
 
 
-// Database Set Up
+/* DATABASE */
+
+// initialize port
 const PORT = process.env.PORT || 8000;
 
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
@@ -58,6 +51,18 @@ mongoose
     useCreateIndex: true,
   })
   .then(() =>
-    app.listen( () => console.log(`Server Running on port ${PORT}`))
+    app.listen(PORT, () => console.log(`Server Running on port ${PORT}`))
   )
   .catch((err) => console.log(err.message));
+
+
+// connect to db
+const db = mongoose.connection;
+
+db.once("open", () => {
+  console.log(`Connected to MongoDB at HOST: ${db.host} and PORT: ${db.port}`);
+});
+
+db.on("error", (error) => {
+  console.log(`Database Error: ${error}`);
+});

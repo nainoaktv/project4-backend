@@ -15,6 +15,38 @@ router.get('/test', (req, res) => {
     res.json({ message: 'User endpoint OK! ✅' });
 });
 
+
+
+// to be moved to routes
+router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('====> inside /profile');
+    console.log(req.body);
+    console.log('====> user')
+    console.log(req.user);
+    const { id, name, email } = req.user; // object with user object inside
+    res.json({ id, name, email });
+});
+
+router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    console.log('====> inside /messages');
+    console.log(req.body);
+    console.log('====> user')
+    console.log(req.user);
+    const { id, name, email } = req.user; // object with user object inside
+    const messageArray = ['message 1', 'message 2', 'message 3', 'message 4', 'message 5', 'message 6', 'message 7', 'message 8', 'message 9'];
+    const sameUser = await User.findById(id);
+    res.json({ id, name, email, message: messageArray, sameUser });
+});
+
+// Exports
+module.exports = router;
+
+
+/*
+
+OLD CODE : refactored and moved to auth controller
+------------
+
 router.post('/signup', (req, res) => {
     // POST - adding the new user to the database
     console.log('===> Inside of /signup');
@@ -98,26 +130,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// private
-router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-    console.log('====> inside /profile');
-    console.log(req.body);
-    console.log('====> user')
-    console.log(req.user);
-    const { id, name, email } = req.user; // object with user object inside
-    res.json({ id, name, email });
-});
-
-router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    console.log('====> inside /messages');
-    console.log(req.body);
-    console.log('====> user')
-    console.log(req.user);
-    const { id, name, email } = req.user; // object with user object inside
-    const messageArray = ['message 1', 'message 2', 'message 3', 'message 4', 'message 5', 'message 6', 'message 7', 'message 8', 'message 9'];
-    const sameUser = await User.findById(id);
-    res.json({ id, name, email, message: messageArray, sameUser });
-});
-
-// Exports
-module.exports = router;
+*/

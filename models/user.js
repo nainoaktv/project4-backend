@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-// const validator = require('validator');
 
-const UserSchema = new Schema({
+
+const UserSchema = new Schema(
+  {
   name: {
     type: String,
     required: true,
@@ -28,27 +29,17 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     lowercase: true,
-    // validate: (value) => {
-    //     return validator.isEmail(value)
-    // }
-  },
-  location: {
-    type: String
   },
   password: {
     type: String,
     required: true,
     minLength: 5,
   },
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  location: String,
+  occupation: String,
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model("User", UserSchema);

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const PostSchema = new Schema({
-  author: {
+  display_name: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -11,14 +11,13 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  cloudinary_id: {
-    type: String,
-    require: true,
-  },
   content: {
     type: String,
     required: true,
   },
+  location: String,
+  content_picture_path: String,
+  user_profilepic: String,
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,16 +29,10 @@ const PostSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
     },
-  ],
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  ]
+},
+{ timestamps: true }
+);
 
 // likes: {
 //   users: [{
