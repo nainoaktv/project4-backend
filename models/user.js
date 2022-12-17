@@ -16,10 +16,6 @@ const UserSchema = new Schema(
     min: 2,
     max: 50,
   },
-  friends: [{
-    type: Array,
-    default: []
-  }],
   profile_pic: {
     type: String,
     default: "",
@@ -35,6 +31,10 @@ const UserSchema = new Schema(
     required: true,
     minLength: 5,
   },
+  friends: [{
+    type: Array,
+    default: []
+  }],
   location: String,
   occupation: String,
 },

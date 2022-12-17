@@ -1,14 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-import Post from "../models/Post.js";
-import User from "../models/User.js";
+// import Post from "../models/post";
+// import User from "../models/user";
+const User = require('../models/user');
+const Post = require('../models/post');
+
 
 /* CREATE POST */
-export const createPost = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     // capture values of the following from frontend (req.body)
-    const { userId, description, picturePath } = req.body;
+    const { userId, title, content, content_picture_path } = req.body;
 
     // check 'User' table to see if returned userId matches an entry in table
     const user = await User.findById(userId);
@@ -38,7 +41,7 @@ export const createPost = async (req, res) => {
 };
 
 /* READ POST TABLE for our feed in main */
-export const getFeedPosts = async (req, res) => {
+const getFeedPosts = async (req, res) => {
   try {
     // grab all entries from our 'Post' table
     const post = await Post.find();
@@ -54,7 +57,7 @@ export const getFeedPosts = async (req, res) => {
 // get all the posts made by the user for user history in profile?
 // nainoa
 
-export const getUsersPosts = async (req, res) => {
+const getUsersPosts = async (req, res) => {
   try {
     // obtain userId from parameter passed from the url
     const { userId } = req.params;
@@ -69,8 +72,7 @@ export const getUsersPosts = async (req, res) => {
 };
 
 /* UPDATE */
-
-export const likePost = async (req, res) => {
+const likePost = async (req, res) => {
   try {
     // grab relevant values from frontend
     const { id } = req.params;
@@ -104,7 +106,12 @@ export const likePost = async (req, res) => {
   }
 };
 
-module.exports = router;
+module.exports = {
+    createPost,
+    getFeedPosts,
+    getUsersPosts,
+    likePost
+}
 
 /*
  pseudocode 

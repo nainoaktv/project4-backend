@@ -1,16 +1,19 @@
 const express = require('express');
-import { verifyToken } from '../middleware/auth.js';
+const { verifyToken } = require("../middleware/auth.js")
 
-import { getFeedPosts, getUserPosts, likePost } from "../controllers.post.js";
+const { createPost, getFeedPosts, getUsersPosts, likePost } = require("../controllers/post.js");
 
 
 const router = express.Router();
 
 
 // task: add verifytoken to protected routes 
-router.get('/', getFeedPosts);
-router.get('/:userId/posts', getUserPosts);
 
+router.get('/', getFeedPosts);
+
+router.post('/:userId/create')
+
+router.get('/:userId/posts', getUsersPosts);
 
 router.patch('/:id/like', likePost);
 

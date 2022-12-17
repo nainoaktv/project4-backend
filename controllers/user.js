@@ -1,21 +1,103 @@
 // Imports
-require('dotenv').config();
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const { JWT_SECRET } = process.env;
-
-// DB Models
 const User = require('../models/user');
 
-// Controllers
-router.get('/test', (req, res) => {
-    res.json({ message: 'User endpoint OK! ✅' });
-});
+/* READ */
+
+const getUser = async (req, res) => {
+    try{
+        // grab userid from url /:id param
+        const { id } = req.params;
+
+        // find the specific id we just received from the 'User' table
+        const user = await User.findById(id);
+
+        // return the specific user entry
+        res.status(200).json(user);
+
+    } catch (err) {
+        res.status(404).json({ message: err.message })
+    }
+}
+
+const getUserFriends = async (req, res) => {
+    try {
+
+        // grab userid from url /:id param
+        const { id } = req.params;
+
+        // grab the specific user using id we just received from the 'User' table
+        const user = await User.findById(id);
+
+        // with the User entry found, we look into their friends field array
+        // and for each friend within the array, we will look up the friend's userId and search for them
+        // within the User table entry and store that entry into the 'friends' const
+        const friends = await Promise.all(
+            user.friends.map((id) => User.findById(id))
+        );
+
+        // convert the 'friends' array into array of objects
+        const formattedFriends = friends.map(
+            ({ _id, name, occupation, location, profile_pic }) => {
+                return { _id, name, occupation, location, profile_pic };
+            }
+        );
+        res.status(202).json(formattedFriends);
+    } catch (err) {
+        res.status(404).json({ message: err.message })
+    }
+}
+
+/* UPDATE */
+const addRemoveFriend = async (req, res) => {
+    try {
+        // grab user's id and friend id from frontend
+        const { id, friendId } = req.params;
+
+        // find user's table + friend's table for user's ID and friend's ID
+        const user = await User.findById(id)
+        const friend = await User.findById(friendId)
+
+        // if user's friends list does not contain friendID, 
+        // if friend's friend list does not contain user's ID
+        if (user.friends.includes(friendId)){
+            user.friends = user.friends.filter((id) => id !== friendId);
+            friend.friends = friend.friends.filter((id) => id !== id);
+        } else {
+            user.friends.push(friendId);
+            friend.friends.push(id);
+        }
+        await user.save();
+        await friend.save();
+
+        const friends = await Promise.all(
+            user.friends.map((id) => User.findById(id))
+        );
+    
+        const formattedFriends = friends.map(
+            ({ _id, name, occupation, location, profile_pic }) => {
+                return { _id, name, occupation, location, profile_pic };
+            }
+        );
+
+        res.status(200).json(formattedFriends);
+    } catch (err) {
+        res.status(404).json({ message: err.message })
+    }
+}
 
 
+// Exports
+module.exports = {
+    getUser,
+    getUserFriends,
+    addRemoveFriend
+}
+
+
+/*
+
+OLD CODE : refactored and moved to auth controller
+------------
 
 // to be moved to routes
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -38,14 +120,6 @@ router.get('/messages', passport.authenticate('jwt', { session: false }), async 
     res.json({ id, name, email, message: messageArray, sameUser });
 });
 
-// Exports
-module.exports = router;
-
-
-/*
-
-OLD CODE : refactored and moved to auth controller
-------------
 
 router.post('/signup', (req, res) => {
     // POST - adding the new user to the database

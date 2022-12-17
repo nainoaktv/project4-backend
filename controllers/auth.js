@@ -1,17 +1,18 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require('../models/user');
+require("dotenv").config();
 
-export const register = async (req, res) => {
+
+const register = async (req, res) => {
   try {
     // grab the following input from frontend for account creation
     const {
-      firstName,
-      lastName,
+      name,
+      display_name,
+      profile_pic,
       email,
       password,
-      picturePath,
-      friends,
       location,
       occupation,
     } = req.body;
@@ -31,16 +32,13 @@ export const register = async (req, res) => {
     const passwordHash = bcrypt.hashSync(password, salt);
 
     const newUser = new User({
-      firstName,
-      lastName,
+      name,
+      display_name,
+      profile_pic,
       email,
       password: passwordHash,
-      picturePath,
-      friends,
       location,
       occupation,
-      viewedProfile: Math.floor(Math.random() * 10000),
-      impressions: Math.floor(Math.random() * 10000),
     });
 
     // save user
@@ -53,7 +51,7 @@ export const register = async (req, res) => {
 };
 
 /* LOG IN */
-export const login = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email: email });
@@ -64,7 +62,7 @@ export const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. "});
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        
+
         delete user.password;
 
         res.status(200).json({ token, user }); // success!
@@ -72,4 +70,9 @@ export const login = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
+};
+
+module.exports = {
+    register,
+    login
+};
