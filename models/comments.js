@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const Post = require('../models/post');
-const UserRoute = require("../routes/user");
 
 const CommentSchema = new Schema({
   author_id: {
@@ -17,9 +16,10 @@ const CommentSchema = new Schema({
     type: String,
     required: true,
   },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-  }]
+  likes: {
+    type: Map,
+    of: Boolean
+  }
 },
 { timestamps: true }
 );

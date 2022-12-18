@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+// const Comment = require('../models/comments');
 const { Schema } = mongoose;
 
 const PostSchema = new Schema({
@@ -33,18 +34,16 @@ const PostSchema = new Schema({
 { timestamps: true }
 );
 
-// likes: {
-//   users: [{
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//   }],
-//   type: Number,
-//   default: 1,
-//   required: true,
-// },
-//   post_profilepic: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//   },
+
+/* MIDDLEWARE */
+
+//delete comments relating to postId before deleting posts
+// PostSchema.pre('remove', async function (next) {
+//   const post = this
+
+
+//   // find comments with matching post_id and remove
+//   await Comment.deleteMany({ post_id: post._id });
+// })
 
 module.exports = mongoose.model("Post", PostSchema);

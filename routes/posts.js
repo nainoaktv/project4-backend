@@ -27,10 +27,10 @@ PostRoute.patch('/:postId/edit', editPost);
 // delete user post
 PostRoute.delete('/:postId/delete', deletePost);
 
-
-
 // update a post to add a like
 PostRoute.patch('/:postId/like', likePost);
+
+
 
 module.exports = PostRoute;
 

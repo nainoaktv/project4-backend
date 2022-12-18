@@ -76,9 +76,6 @@ const getUsersPosts = async (req, res) => {
 
       })
 
-    
-    console.log(" user posts ", userPosts);
-
     res.status(200).json(userPosts);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -132,8 +129,12 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ message: "Cannot delete post: post not found." })
     }
 
-    if (userId === getPost.author_id) {
-      getPost.delete(postId);
+    if (userId === getPost.author_id.toString()) {
+      // delete post that has post id of postId
+      await getPost.delete(postId);
+      // find comments with matching post_id and remove
+      await Comment.deleteMany({ post_id: post._id });
+
       res.status(200).json({ message: "Successfully deleted post." });
     } else {
       return res.status(403).json({ message: "You can't do that."})
@@ -166,7 +167,7 @@ const editPost = async (req, res) => {
         }
       );
         // res.status(200).json({ message: "Successfully edit post." });
-        res.status(200).json(updatedPost);
+        res.status(200).json({ message: " Successfully edited post." + getPost._id});
     } else {
       return res.status(403).json({ message: "You can't do that."})
     }
