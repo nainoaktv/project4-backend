@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/posts");
+const commentRoutes = require("./routes/comments")
 
 // Delete
 const User = require('./models/user');
@@ -48,6 +49,7 @@ app.get("/test", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/comments", commentRoutes);
 
 
 

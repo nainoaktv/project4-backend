@@ -60,7 +60,24 @@ const getUsersPosts = async (req, res) => {
     const { userId } = req.params;
 
     // search db for all posts made by userId
-    const userPosts = await Post.find({ userId });
+    // nainoa: this will select the post made by the userID
+    // then it looks at the comment model and returns the content of the comment
+    // then it looks at the User model and returns the displayname of the user who made the comment
+    const userPosts = await Post.find({ author_id: userId })
+      .populate({ 
+        path: "comments", 
+        model: 'Comment',
+        select: 'content',
+        populate: {
+          path: 'author_id',
+          model: 'User',
+          select: 'display_name'
+        }
+
+      })
+
+    
+    console.log(" user posts ", userPosts);
 
     res.status(200).json(userPosts);
   } catch (err) {
