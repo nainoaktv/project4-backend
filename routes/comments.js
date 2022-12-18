@@ -1,6 +1,6 @@
 const express = require('express');
 const { model } = require('mongoose');
-const { createComment } = require('../controllers/comments.js');
+const { createComment, deleteComment } = require('../controllers/comments.js');
 const { verifyToken } = require("../middleware/auth.js")
 
 const commentRoute = express.Router();
@@ -16,7 +16,7 @@ commentRoute.patch('/:commentId/edit');
 
 
 // DELETE
-commentRoute.delete('/:commentId/delete');
+commentRoute.delete('/:commentId/delete', deleteComment);
 
 
 

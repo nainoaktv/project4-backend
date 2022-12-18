@@ -5,7 +5,6 @@ const Comment = require("../models/comments");
 /* CREATE COMMENT */
 const createComment = async (req, res) => {
   try {
-    console.log("test");
     // grab postID from url
     const { postId } = req.params;
 
@@ -16,14 +15,10 @@ const createComment = async (req, res) => {
     const getUser = await User.findById(userId);
     const getPost = await Post.findById(postId);
 
-    console.log(" author of comment ID " + getUser._id);
-    console.log(" post ID" + getPost._id);
-
     if (!content)
       return res.status(404).json({ message: "Missing post content" });
 
-    if (!getPost) 
-      return res.status(404).json({ message: "No post found" });
+    if (!getPost) return res.status(404).json({ message: "No post found" });
 
     const newComment = new Comment({
       author_id: getUser._id,
@@ -36,12 +31,10 @@ const createComment = async (req, res) => {
     // save post to db
     await newComment.save();
 
-    const updatePost = await Post.findByIdAndUpdate(
-      getPost._id,
-      { $push: 
-        { comments: newComment._id }
-      },
-    )
+    // refactored to comment schema
+    // const updatePost = await Post.findByIdAndUpdate(getPost._id, {
+    //   $push: { comments: newComment._id },
+    // });
 
     // update newsfeed with updated Post table which includes our new post
     // const post = await Post.find();
@@ -53,6 +46,33 @@ const createComment = async (req, res) => {
   }
 };
 
+const deleteComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const { userId } = req.body;
+
+    const getComment = await Comment.findById(commentId);
+
+    if (!getComment) {
+      return res
+        .status(404)
+        .json({ message: "Cannot delete comment: comment not found" });
+    }
+
+    // userId is already a string, but author_id is stored as an object so either we use
+    // == or convert to string in order to use strict comparison
+    if (getComment.author_id.toString() === userId) {
+      getComment.delete(commentId);
+      res.status(200).json({ message: "Successfully deleted comment" });
+    } else {
+      return res.status(403).json({ message: "You can't do that." });
+    }
+  } catch (err) {
+    res.status(409).json({ message: err.message });
+  }
+};
+
 module.exports = {
   createComment,
+  deleteComment,
 };
