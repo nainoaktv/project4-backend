@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const AuthRoute = express.Router();
 
 const { login } = require("../controllers/auth.js");
 
 
 // if !verifytoken then "/" = login
 // else  
-router.post("/login", login);
+AuthRoute.post("/login", login);
 
 /* ROUTES WITH FILES 
 when /auth/register is hit
@@ -15,4 +15,4 @@ register (the controller) the user
 multer upload function needs to be above this line in order for upload() to access it */
 // app.post("/auth/register", upload.single("picture"), register)
 
-module.exports = router;
+module.exports = AuthRoute;

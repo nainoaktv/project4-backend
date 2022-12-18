@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const PostSchema = new Schema({
-  display_name: {
+  author_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -18,11 +18,10 @@ const PostSchema = new Schema({
   location: String,
   content_picture_path: String,
   user_profilepic: String,
-  likes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-    },
-  ],
+  likes: {
+    type: Map,
+    of: Boolean,
+  },
 
   comments: [
     {
