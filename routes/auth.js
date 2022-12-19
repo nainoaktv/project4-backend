@@ -4,11 +4,9 @@ const AuthRoute = express.Router();
 const { login } = require("../controllers/auth.js");
 
 
-// if !verifytoken then "/" = login
-// else  
 AuthRoute.post("/login", login);
 
-/* ROUTES WITH FILES 
+/* ROUTES WITH FILES - for later feature: file upload
 when /auth/register is hit
 we use middleware upload.single("picture") to upload to /assets before we
 register (the controller) the user

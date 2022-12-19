@@ -52,32 +52,28 @@ const editComment = async (req, res) => {
     const { commentId } = req.params;
     const { userId, content } = req.body;
 
-    const getComment = await Comment.findById(commentId)
+    const getComment = await Comment.findById(commentId);
 
     if (!getComment) {
-      return res.status(403).json({ message: "Unable to edit comment: comment not found"})
+      return res
+        .status(403)
+        .json({ message: "Unable to edit comment: comment not found" });
     }
 
     if (userId === getComment.author_id.toString()) {
-      const updatedComment = await Comment.findByIdAndUpdate(
-        getComment._id,
-        {
-          content: content
-        }
-      );
+      const updatedComment = await Comment.findByIdAndUpdate(getComment._id, {
+        content: content,
+      });
       res.status(200).json({
-        message: 'Updated comment ID ' + getComment._id
+        message: "Updated comment ID " + getComment._id,
       });
     } else {
-      return res.status(403).json({ message: "You can't do that."})
+      return res.status(403).json({ message: "You can't do that." });
     }
-
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
-}
-
-
+};
 
 const deleteComment = async (req, res) => {
   try {
@@ -128,18 +124,15 @@ const likeComment = async (req, res) => {
     );
 
     res.status(200).json(updatedComment);
-    // res.status(200).json({ message: "Successfully updated likes on comment: " + getComment._id});
+    // res.status(200).json({ message: "Successfully updated likes on comment."});
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
-}
- 
-
-
+};
 
 module.exports = {
   createComment,
   editComment,
   deleteComment,
-  likeComment
+  likeComment,
 };

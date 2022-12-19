@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const Post = require("../models/post");
-const Comment = require("../models/comments")
+const Comment = require("../models/comments");
 const { post } = require("../routes/auth");
 
 /* CREATE POST */
@@ -27,9 +27,6 @@ const createPost = async (req, res) => {
 
     // save post to db
     await newPost.save();
-
-    // update newsfeed with updated Post table which includes our new post
-    // const post = await Post.find();
 
     res.status(201).json(newPost._id);
   } catch (err) {
@@ -64,18 +61,16 @@ const getUsersPosts = async (req, res) => {
     // nainoa: this will select the post made by the userID
     // then it looks at the comment model and returns the content of the comment
     // then it looks at the User model and returns the displayname of the user who made the comment
-    const userPosts = await Post.find({ author_id: userId })
-      .populate({ 
-        path: "comments", 
-        model: 'Comment',
-        select: 'content',
-        populate: {
-          path: 'author_id',
-          model: 'User',
-          select: 'display_name'
-        }
-
-      })
+    const userPosts = await Post.find({ author_id: userId }).populate({
+      path: "comments",
+      model: "Comment",
+      select: "content",
+      populate: {
+        path: "author_id",
+        model: "User",
+        select: "display_name",
+      },
+    });
 
     res.status(200).json(userPosts);
   } catch (err) {
@@ -127,7 +122,9 @@ const deletePost = async (req, res) => {
     const getPost = await Post.findById(postId);
 
     if (!getPost) {
-      return res.status(404).json({ message: "Cannot delete post: post not found." })
+      return res
+        .status(404)
+        .json({ message: "Cannot delete post: post not found." });
     }
 
     if (userId === getPost.author_id.toString()) {
@@ -138,13 +135,12 @@ const deletePost = async (req, res) => {
 
       res.status(200).json({ message: "Successfully deleted post." });
     } else {
-      return res.status(403).json({ message: "You can't do that."})
+      return res.status(403).json({ message: "You can't do that." });
     }
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
 };
-
 
 /* EDIT POST */
 const editPost = async (req, res) => {
@@ -156,28 +152,27 @@ const editPost = async (req, res) => {
     const getPost = await Post.findById(postId);
 
     if (!getPost) {
-      return res.status(404).json({ message: "Cannot edit post: post not found." })
+      return res
+        .status(404)
+        .json({ message: "Cannot edit post: post not found." });
     }
 
     if (userId == getPost.author_id) {
-      const updatedPost = await Post.findByIdAndUpdate(
-        getPost._id,
-        {
-          title: title,
-          content: content
-        }
-      );
-        // res.status(200).json({ message: "Successfully edit post." });
-        res.status(200).json({ message: " Successfully edited post." + getPost._id});
+      const updatedPost = await Post.findByIdAndUpdate(getPost._id, {
+        title: title,
+        content: content,
+      });
+      // res.status(200).json({ message: "Successfully edit post." });
+      res
+        .status(200)
+        .json({ message: " Successfully edited post." + getPost._id });
     } else {
-      return res.status(403).json({ message: "You can't do that."})
+      return res.status(403).json({ message: "You can't do that." });
     }
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
 };
-
-
 
 module.exports = {
   createPost,
@@ -187,49 +182,3 @@ module.exports = {
   getFeedPosts,
   likePost,
 };
-
-/*
- pseudocode 
-=============== */
-
-// ApiCalls.js
-// const getAllPosts = (postId) => {
-//     let url = `www.helloworld.com/api/posts/${postId}`;
-//     const { data } = axios.get(url);
-//     return data.response;
-// }
-
-// import { getAllPosts } from 'ApiCalls.js';
-
-// const UserPages = () => {
-
-//     const posts = getAllPosts(id);
-
-//     return (
-//         <>
-//             {posts.map(post => {
-//                 <p>{post.author}</p>
-//                 <p>{post.title}</p>
-//                 <p>{post.content}</p>
-//                 <p>{post.likes}</p>
-//             })}
-//         </>
-//     )
-// }
-
-// PostController
-// function getAll(req, res) {
-//     // use the req params (postId)
-//     // import post model from your schema
-//     // const postResult = post.findAll({ postId })
-//     // send back postResult ==>
-//     /*
-//      {
-//         author: {},
-//         title: "",
-//         content: "",
-//      }
-//      === res.send(postResult);
-//     */
-//     res.send(req.params);
-// }

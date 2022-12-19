@@ -4,6 +4,7 @@ const User = require("./models/user.js");
 const { post } = require("./routes/auth.js");
 // const Post = require('./models/post.js');
 
+/* SCHEMA HAS BEEN MODIFIED; TO RE-SEED, PLEASE ADJUST FIELDS ACCORDINGLY TO SCHEMA */
 const userIds = [
   new mongoose.Types.ObjectId(),
   new mongoose.Types.ObjectId(),
