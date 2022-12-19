@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Post = require("../models/post");
+const Comment = require("../models/comments")
 const { post } = require("../routes/auth");
 
 /* CREATE POST */
@@ -133,7 +134,7 @@ const deletePost = async (req, res) => {
       // delete post that has post id of postId
       await getPost.delete(postId);
       // find comments with matching post_id and remove
-      await Comment.deleteMany({ post_id: post._id });
+      await Comment.deleteMany({ post_id: postId });
 
       res.status(200).json({ message: "Successfully deleted post." });
     } else {

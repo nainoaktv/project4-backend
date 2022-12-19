@@ -6,19 +6,19 @@ const { verifyToken } = require("../middleware/auth.js")
 const commentRoute = express.Router();
 
 
-// CREATE
-commentRoute.post('/:postId/create', createComment);
+// CREATE a comment
+commentRoute.post('/:postId/create', verifyToken, createComment);
 
 
-// UPDATE
-commentRoute.patch('/:commentId/edit', editComment);
+// UPDATE a comment
+commentRoute.patch('/:commentId/edit', verifyToken, editComment);
 
 
-// DELETE
-commentRoute.delete('/:commentId/delete', deleteComment);
+// DELETE a comment
+commentRoute.delete('/:commentId/delete', verifyToken, deleteComment);
 
 // update a Comment to add a like
-commentRoute.patch('/:commentId/like', likeComment);
+commentRoute.patch('/:commentId/like', verifyToken, likeComment);
 
 
 module.exports = commentRoute;

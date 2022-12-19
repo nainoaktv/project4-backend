@@ -7,54 +7,25 @@ const { createPost, deletePost, editPost, getFeedPosts, getUsersPosts, likePost 
 const PostRoute = express.Router();
 
 
-// task: add verifytoken to protected routes 
-
-
-// tested working
 
 // get all posts made by user
-PostRoute.get('/:userId/posts', getUsersPosts);
+PostRoute.get('/:userId/posts', verifyToken, getUsersPosts);
 
-// get all posts 
-PostRoute.get('/', getFeedPosts);
+// get all posts - only when logged in
+PostRoute.get('/', verifyToken, getFeedPosts);
 
 // create new post
-PostRoute.post('/:userId/create', createPost);
+PostRoute.post('/:userId/create', verifyToken, createPost);
 
 // edit user post 
-PostRoute.patch('/:postId/edit', editPost);
+PostRoute.patch('/:postId/edit', verifyToken, editPost);
 
 // delete user post
-PostRoute.delete('/:postId/delete', deletePost);
+PostRoute.delete('/:postId/delete', verifyToken, deletePost);
 
 // update a post to add a like
-PostRoute.patch('/:postId/like', likePost);
+PostRoute.patch('/:postId/like', verifyToken, likePost);
 
 
 
 module.exports = PostRoute;
-
-
-/* Stuff
-===================
-
-// www.helloworld.com/api/posts/:postId
-router.get('/:postId', (req, res) => {
-    res.send('Post + ', req.params);
-});
-
-// /posts/all ===> all posts
-// /posts/id ===> specific post with that id
-// /posts/create ===> create post
-
-// www.helloworld.com/posts/{userId} - get all posts for a specific user id?
-router.get('/:userId', (req, res) => {
-    // connect to db
-    const result = posts.findAll();
-    res.send(result)
-})
-
-router.post('/create', () => {
-    // create post
-})
-*/

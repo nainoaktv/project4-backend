@@ -6,13 +6,16 @@ const { register } = require("../controllers/auth.js")
 
 // Todo Task: add verifyToken to change to auth page
 
-
+// create
 UserRoute.post("/register", register);
 
-UserRoute.get("/:id", getUser);
+// read
+UserRoute.get("/:id", verifyToken, getUser);
 
-UserRoute.get("/:id/friends", getUserFriends);
+// get user's friends (read)
+UserRoute.get("/:id/friends", verifyToken, getUserFriends);
 
-UserRoute.patch("/:id/:friendId", addRemoveFriend);
+// update - add/remove friend from friends list
+UserRoute.patch("/:id/:friendId", verifyToken, addRemoveFriend);
 
 module.exports = UserRoute;
