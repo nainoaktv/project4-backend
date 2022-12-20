@@ -39,7 +39,7 @@ const PostSchema = new Schema(
 
 // this has been removed because it caused a circular dependency issue with mongodb
 
-//delete comments relating to postId before deleting posts
+// delete comments relating to postId before deleting posts
 // PostSchema.pre('remove', async function (next) {
 //   const post = this
 

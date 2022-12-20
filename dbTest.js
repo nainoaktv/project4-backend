@@ -99,7 +99,7 @@ const users = [
     location: "Lost",
     occupation: "Derp",
     __v: 0,
-  }
+  },
 ];
 
 // const posts = new post(
