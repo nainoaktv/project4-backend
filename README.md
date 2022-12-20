@@ -38,6 +38,9 @@ Install Ayyo with the following command
 
 - Ability to edit account details
 
+## Screenshots
+
+![App Screenshot](https://raw.github.com/nainoaktv/project4-backend/main/ERD.png)
 
 ## API Reference
 
