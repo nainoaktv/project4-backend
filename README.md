@@ -34,13 +34,18 @@ Install Ayyo with the following command
     
 ## Future Enhancements
 
-- Profile picture file upload
-
-- Ability to edit account details
+- [ ] User Profile: 
+    - [ ] Ability to have profile pictures
+    - [ ] Ability to edit account details
+    - [ ] Ability to view account activity history (actions like post, comment and like history)
+   
+- [x] ReadMe
 
 ## Screenshots
+Note: ERD does not 100% reflect current implementation. It was changed as I learned more
 
 ![App Screenshot](https://raw.github.com/nainoaktv/project4-backend/main/ERD.png)
+
 
 ## API Reference
 
